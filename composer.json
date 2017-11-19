@@ -26,7 +26,10 @@
         "paragonie/random_compat": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.4",
+        "doctrine/instantiator": ">=1.0, <1.1",
+        "phpdocumentor/reflection-docblock": "<3.2.3",
+        "phpunit/php-token-stream": "^1.4",
+        "phpunit/phpunit": "^5.7",
         "satooshi/php-coveralls": "^1.0"
     }
 }
