@@ -72,13 +72,19 @@ function calc_totp($key, $step_count = false, $digits = 6, $hash = 'sha1', $time
 
     $secret = Encoding::base32DecodeUpper((string)$key);
 
+    if ($hash === 'sha256') {
+        $secret .= substr($secret, 0, 12);
+    } else if ($hash === 'sha512') {
+        $secret .= $secret . $secret . substr($secret, 0, 4);
+    }
+
     if (false === $step_count) {
         $step_count = floor(time() / $time_step);
     }
 
     $timestamp = pack('J', $step_count);
     $hash = hash_hmac($hash, $timestamp, $secret, true);
-    $offset = ord($hash[ 19 ]) & 0xf;
+    $offset = ord($hash[ strlen($hash) - 1 ]) & 0xf;
     $code = (
                 ((ord($hash[ $offset + 0 ]) & 0x7f) << 24) |
                 ((ord($hash[ $offset + 1 ]) & 0xff) << 16) |
