@@ -54,6 +54,31 @@ function is_valid_authcode($key, $authcode)
 }
 
 /**
+ * Pad a short secret with bytes from the same until it's the correct length
+ * for hashing.
+ *
+ * @param string $secret Secret key to pad
+ * @param int    $length Byte length of the desired padded secret
+ *
+ * @throws \InvalidArgumentException If the secret or length are invalid
+ *
+ * @return string
+ */
+function pad_secret($secret, $length)
+{
+    if (empty($secret)) {
+        throw new \InvalidArgumentException('Secret must be non-empty!');
+    }
+
+    $length = intval($length);
+    if ($length <= 0) {
+        throw new \InvalidArgumentException('Padding length must be non-zero');
+    }
+
+    return str_pad($secret, $length, $secret, STR_PAD_RIGHT);
+}
+
+/**
  * Calculate a valid code given the shared secret key
  *
  * @param string|Key $key        The shared secret key to use for calculating code.
@@ -72,10 +97,18 @@ function calc_totp($key, $step_count = false, $digits = 6, $hash = 'sha1', $time
 
     $secret = Encoding::base32DecodeUpper((string)$key);
 
-    if ($hash === 'sha256') {
-        $secret .= substr($secret, 0, 12);
-    } else if ($hash === 'sha512') {
-        $secret .= $secret . $secret . substr($secret, 0, 4);
+    switch($hash) {
+        case 'sha1':
+            $secret = pad_secret($secret, 20);
+            break;
+        case 'sha256':
+            $secret = pad_secret($secret, 32);
+            break;
+        case 'sha512':
+            $secret = pad_secret($secret, 64);
+            break;
+        default:
+            throw new \InvalidArgumentException('Invalid hash type specified!');
     }
 
     if (false === $step_count) {

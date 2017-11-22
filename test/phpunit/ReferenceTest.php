@@ -48,6 +48,12 @@ class ReferenceTest extends TestCase {
 
             $this->assertEquals($vector[0], calc_totp($token, false, 8, $hash, self::$step));
         }
+
+        foreach (self::$vectors as $time => $vector) {
+            self::$now = (int) $time;
+
+            $this->assertEquals(substr($vector[0], 2), calc_totp($token, false, 6, $hash, self::$step));
+        }
     }
 
 
@@ -60,6 +66,12 @@ class ReferenceTest extends TestCase {
 
             $this->assertEquals($vector[1], calc_totp($token, false, 8, $hash, self::$step));
         }
+
+        foreach (self::$vectors as $time => $vector) {
+            self::$now = (int) $time;
+
+            $this->assertEquals(substr($vector[1], 2), calc_totp($token, false, 6, $hash, self::$step));
+        }
     }
 
 
@@ -71,6 +83,12 @@ class ReferenceTest extends TestCase {
             self::$now = (int) $time;
 
             $this->assertEquals($vector[2], calc_totp($token, false, 8, $hash, self::$step));
+        }
+
+        foreach (self::$vectors as $time => $vector) {
+            self::$now = (int) $time;
+
+            $this->assertEquals(substr($vector[2], 2), calc_totp($token, false, 6, $hash, self::$step));
         }
     }
 }
