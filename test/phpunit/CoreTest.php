@@ -86,4 +86,20 @@ class CoreTest extends TestCase
         $key = new Key();
         calc_totp($key, false, 6, 'md5');
     }
+
+    public function test_time_step_nonzero()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $key = new Key();
+        calc_totp($key, false, 6, 'sha1', 0);
+    }
+
+    public function test_time_step_positive()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $key = new Key();
+        calc_totp($key, false, 6, 'sha1', -30);
+    }
 }

@@ -111,6 +111,11 @@ function calc_totp($key, $step_count = false, $digits = 6, $hash = 'sha1', $time
             throw new \InvalidArgumentException('Invalid hash type specified!');
     }
 
+    $time_step = intval($time_step);
+    if ($time_step <= 0) {
+        throw new \InvalidArgumentException('Time step must be greater than zero');
+    }
+
     if (false === $step_count) {
         $step_count = floor(time() / $time_step);
     }
