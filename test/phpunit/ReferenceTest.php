@@ -39,7 +39,7 @@ class ReferenceTest extends TestCase {
     ];
 
 
-    public function test_sha1() {
+    public function test_sha1_generate() {
         if (PHP_INT_SIZE === 4) {
             $this->markTestSkipped('calc_totp requires 64-bit PHP');
         }
@@ -60,8 +60,28 @@ class ReferenceTest extends TestCase {
         }
     }
 
+    public function test_sha1_authenticate() {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('calc_totp requires 64-bit PHP');
+        }
 
-    public function test_sha256() {
+        $hash = 'sha1';
+        $token = Encoding::base32EncodeUpper(self::$token);
+
+        foreach (self::$vectors as $time => $vector) {
+            self::$now = (int) $time;
+
+            $this->assertTrue(is_valid_authcode($token, $vector[0], $hash));
+        }
+
+        foreach (self::$vectors as $time => $vector) {
+            self::$now = (int) $time;
+
+            $this->assertTrue(is_valid_authcode($token, substr($vector[0], 2), $hash));
+        }
+    }
+
+    public function test_sha256_generate() {
         if (PHP_INT_SIZE === 4) {
             $this->markTestSkipped('calc_totp requires 64-bit PHP');
         }
@@ -82,8 +102,28 @@ class ReferenceTest extends TestCase {
         }
     }
 
+    public function test_sha256_authenticate() {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('calc_totp requires 64-bit PHP');
+        }
 
-    public function test_sha512() {
+        $hash = 'sha256';
+        $token = Encoding::base32EncodeUpper(self::$token);
+
+        foreach (self::$vectors as $time => $vector) {
+            self::$now = (int) $time;
+
+            $this->assertTrue(is_valid_authcode($token, $vector[1], $hash));
+        }
+
+        foreach (self::$vectors as $time => $vector) {
+            self::$now = (int) $time;
+
+            $this->assertTrue(is_valid_authcode($token, substr($vector[1], 2), $hash));
+        }
+    }
+
+    public function test_sha512_generate() {
         if (PHP_INT_SIZE === 4) {
             $this->markTestSkipped('calc_totp requires 64-bit PHP');
         }
@@ -101,6 +141,27 @@ class ReferenceTest extends TestCase {
             self::$now = (int) $time;
 
             $this->assertEquals(substr($vector[2], 2), calc_totp($token, false, 6, $hash, self::$step));
+        }
+    }
+
+    public function test_sha512_authenticate() {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('calc_totp requires 64-bit PHP');
+        }
+
+        $hash = 'sha512';
+        $token = Encoding::base32EncodeUpper(self::$token);
+
+        foreach (self::$vectors as $time => $vector) {
+            self::$now = (int) $time;
+
+            $this->assertTrue(is_valid_authcode($token, $vector[2], $hash));
+        }
+
+        foreach (self::$vectors as $time => $vector) {
+            self::$now = (int) $time;
+
+            $this->assertTrue(is_valid_authcode($token, substr($vector[2], 2), $hash));
         }
     }
 }

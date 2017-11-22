@@ -19,12 +19,14 @@ function generate_key($bytes = 16)
 /**
  * Checks if a given code is valid for a given key, allowing for a certain amount of time drift
  *
- * @param string|Key $key      The share secret key to use.
- * @param string         $authcode The code to test.
+ * @param string|Key $key       The share secret key to use.
+ * @param string     $authcode  The code to test.
+ * @param string     $hash      The hash used to calculate the code.
+ * @param int        $time_step The size of the time step.
  *
  * @return bool Whether the code is valid within the time frame
  */
-function is_valid_authcode($key, $authcode)
+function is_valid_authcode($key, $authcode, $hash = 'sha1', $time_step = 30)
 {
     if (!($key instanceof Key)) {
         $key = Key::import($key);
@@ -44,9 +46,11 @@ function is_valid_authcode($key, $authcode)
     });
     $time = time() / 30;
 
+    $digits = strlen($authcode);
+
     foreach ($ticks as $offset) {
         $log_time = $time + $offset;
-        if (calc_totp($key, $log_time) === $authcode) {
+        if (calc_totp($key, $log_time, $digits, $hash, $time_step) === $authcode) {
             return true;
         }
     }
@@ -81,7 +85,7 @@ function pad_secret($secret, $length)
 /**
  * Calculate a valid code given the shared secret key
  *
- * @param string|Key $key        The shared secret key to use for calculating code.
+ * @param string|Key     $key        The shared secret key to use for calculating code.
  * @param mixed          $step_count The time step used to calculate the code, which is the floor of time() divided by step size.
  * @param int            $digits     The number of digits in the returned code.
  * @param string         $hash       The hash used to calculate the code.
