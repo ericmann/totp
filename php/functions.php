@@ -26,7 +26,7 @@ function generate_key($bytes = 16)
  */
 function is_valid_authcode($key, $authcode)
 {
-    if (!$key instanceof Key) {
+    if (!($key instanceof Key)) {
         $key = Key::import($key);
     }
 

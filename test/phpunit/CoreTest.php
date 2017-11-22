@@ -26,6 +26,20 @@ class CoreTest extends TestCase
         $this->assertTrue(is_valid_authcode($key, $otp));
     }
 
+    public function test_string_key_validation()
+    {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('calc_totp requires 64-bit PHP');
+        }
+
+        $key = new Key();
+        $key_str = (string) $key;
+
+        $otp = calc_totp($key);
+
+        $this->assertTrue(is_valid_authcode($key_str, $otp));
+    }
+
     public function test_invalid_otp()
     {
         if (PHP_INT_SIZE === 4) {
@@ -47,8 +61,26 @@ class CoreTest extends TestCase
         $this->assertEquals('abcab', pad_secret($secret, 5));
     }
 
+    public function test_padding_empty_string()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        pad_secret('', 20);
+    }
+
+    public function test_padding_negative_length()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        pad_secret('secret', -5);
+    }
+
     public function test_invalid_hash()
     {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('calc_totp requires 64-bit PHP');
+        }
+
         $this->expectException(\InvalidArgumentException::class);
 
         $key = new Key();

@@ -40,6 +40,10 @@ class ReferenceTest extends TestCase {
 
 
     public function test_sha1() {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('calc_totp requires 64-bit PHP');
+        }
+
         $hash = 'sha1';
         $token = Encoding::base32EncodeUpper(self::$token);
 
@@ -58,6 +62,10 @@ class ReferenceTest extends TestCase {
 
 
     public function test_sha256() {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('calc_totp requires 64-bit PHP');
+        }
+
         $hash = 'sha256';
         $token = Encoding::base32EncodeUpper(self::$token);
 
@@ -76,6 +84,10 @@ class ReferenceTest extends TestCase {
 
 
     public function test_sha512() {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestSkipped('calc_totp requires 64-bit PHP');
+        }
+
         $hash = 'sha512';
         $token = Encoding::base32EncodeUpper(self::$token);
 
