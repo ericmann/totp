@@ -13,9 +13,11 @@ class Key
      *
      * @param int $byte_length
      */
-    public function __construct($byte_length = 16)
+    public function __construct(int $byte_length = 16)
     {
-        $this->bytes = random_bytes($byte_length);
+        if ($byte_length > 0) {
+            $this->bytes = random_bytes($byte_length);
+        }
     }
 
     /**
@@ -23,7 +25,7 @@ class Key
      *
      * @return string
      */
-    public function __toString()
+    public function __toString() : string
     {
         return Encoding::base32EncodeUpper($this->bytes);
     }
@@ -36,7 +38,7 @@ class Key
      *
      * @return string A URL to use as an img src to display the QR code
      */
-    public function qr_code($site, $user)
+    public function qrCode(string $site, string $user) : string
     {
         $name = $site . ':' . $user;
         $google_url = urlencode('otpauth://totp/' . $name . '?secret=' . (string)$this);
@@ -50,21 +52,18 @@ class Key
      *
      * @param string $key The key we wish to import
      *
-     * @throws \InvalidArgumentException If the key is invalid
+     * @throws \RangeException If the key is invalid
      *
      * @return Key
      */
-    public static function import($key)
+    public static function import(string $key) : Key
     {
-        try {
-            $token = new Key();
-            $raw = Encoding::base32DecodeUpper(strtoupper($key));
+        $token = new Key(0);
 
-            $token->bytes = $raw;
+        $raw = Encoding::base32DecodeUpper(strtoupper($key));
 
-            return $token;
-        } catch(\RangeException $e) {
-            throw new \InvalidArgumentException('Provided TOTP key is invalid.');
-        }
+        $token->bytes = $raw;
+
+        return $token;
     }
 }

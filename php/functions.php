@@ -9,9 +9,11 @@ use \ParagonIE\ConstantTime\Encoding;
  *
  * @param int $bytes Number of bytes to use for key.
  *
+ * @throws \Exception if it was not possible to gather sufficient entropy.
+ *
  * @return Key Long, random string composed of base32 characters.
  */
-function generate_key($bytes = 16)
+function generate_key(int $bytes = 16) : Key
 {
     return new Key($bytes);
 }
@@ -24,9 +26,11 @@ function generate_key($bytes = 16)
  * @param string     $hash      The hash used to calculate the code.
  * @param int        $time_step The size of the time step.
  *
+ * @throws \Exception if it was not possible to gather sufficient entropy.
+ *
  * @return bool Whether the code is valid within the time frame
  */
-function is_valid_authcode($key, $authcode, $hash = 'sha1', $time_step = 30)
+function is_valid_authcode($key, string $authcode, string $hash = 'sha1', int $time_step = 30) : bool
 {
     if (!($key instanceof Key)) {
         $key = Key::import($key);
@@ -36,7 +40,7 @@ function is_valid_authcode($key, $authcode, $hash = 'sha1', $time_step = 30)
 
     // Array of all ticks to allow, sorted using absolute value to test closest match first.
     $ticks = range(-$max_ticks, $max_ticks);
-    usort($ticks, function($a, $b) {
+    usort($ticks, function ($a, $b) {
         $a = abs($a);
         $b = abs($b);
         if ($a === $b) {
@@ -68,7 +72,7 @@ function is_valid_authcode($key, $authcode, $hash = 'sha1', $time_step = 30)
  *
  * @return string
  */
-function pad_secret($secret, $length)
+function pad_secret(string $secret, int $length) : string
 {
     if (empty($secret)) {
         throw new \InvalidArgumentException('Secret must be non-empty!');
@@ -86,14 +90,16 @@ function pad_secret($secret, $length)
  * Calculate a valid code given the shared secret key
  *
  * @param string|Key     $key        The shared secret key to use for calculating code.
- * @param mixed          $step_count The time step used to calculate the code, which is the floor of time() divided by step size.
+ * @param mixed          $step_count The time step used to calculate the code.
  * @param int            $digits     The number of digits in the returned code.
  * @param string         $hash       The hash used to calculate the code.
  * @param int            $time_step  The size of the time step.
  *
+ * @throws \Exception if it was not possible to gather sufficient entropy.
+ *
  * @return string The totp code
  */
-function calc_totp($key, $step_count = false, $digits = 6, $hash = 'sha1', $time_step = 30)
+function calc_totp($key, $step_count = false, int $digits = 6, string $hash = 'sha1', int $time_step = 30) : string
 {
     if (!$key instanceof Key) {
         $key = Key::import($key);
@@ -101,7 +107,7 @@ function calc_totp($key, $step_count = false, $digits = 6, $hash = 'sha1', $time
 
     $secret = Encoding::base32DecodeUpper((string)$key);
 
-    switch($hash) {
+    switch ($hash) {
         case 'sha1':
             $secret = pad_secret($secret, 20);
             break;

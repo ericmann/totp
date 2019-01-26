@@ -1,27 +1,27 @@
 language: php
 
-php:
-    - 5.6
-    - 7.0
-    - 7.1
-    - 7.2
-    - nightly
-
 matrix:
-    fast_finish: true
-    allow_failures:
-        - php: nightly
+  include:
+    - php: 7.2
+    - php: 7.3
+    - php: nightly
+    - php: 7.3
+      env: TRAVISCI=phpcs
+  allow_failures:
+    - php: nightly
+    - php: 7.3
+      env: TRAVISCI=phpcs
 
 before_script:
     - composer install --dev --no-interaction
 
-after_script:
-  - php vendor/bin/coveralls -v
-
-
 script:
   - mkdir -p build/logs
-  - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - php vendor/bin/phpunit -c phpunit.xml.dist
+  - |
+    if [[ "$TRAVISCI" == "phpcs" ]] ; then
+      php vendor/bin/phpcs
+    fi
 
 after_success:
-  - travis_retry php vendor/bin/coveralls
+  - travis_retry php vendor/bin/php-coveralls
