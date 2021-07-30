@@ -3,7 +3,6 @@ name: Build
 on: [push]
 
 jobs:
-  build-test:
   run:
     runs-on: ubuntu-latest
     strategy:
