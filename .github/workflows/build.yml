@@ -27,7 +27,9 @@ jobs:
         tools: phpunit:${{ matrix.phpunit-versions }}
 
     - name: Install Composer dependencies
-      run: composer install --dev --no-interaction
+      run: |
+        composer update
+        composer install --dev --no-interaction
 
     - name: Test with phpunit
       run: vendor/bin/phpunit -c phpunit.xml.dist
