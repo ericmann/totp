@@ -8,11 +8,11 @@ jobs:
     strategy:
       matrix:
         php-versions: ['7.4', '8.0']
-        phpunit-versions: ['8.5.18']
+        phpunit-versions: ['9.5.7']
         include:
         - operating-system: 'ubuntu-latest'
           php-versions: '7.4'
-          phpunit-versions: '8.5.18'
+          phpunit-versions: '9.5.7'
 
     steps:
     - uses: actions/checkout@v2
