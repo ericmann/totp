@@ -32,7 +32,7 @@ jobs:
         composer install --dev --no-interaction
 
     - name: Test with phpunit
-      run: vendor/bin/phpunit -c phpunit.xml.dist
+      run: vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
 
     - name: Report code Coverage
       run: vendor/bin/php-coveralls
