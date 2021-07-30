@@ -23,7 +23,7 @@
         ]
     },
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "paragonie/constant_time_encoding": "^2.4"
     },
     "require-dev": {

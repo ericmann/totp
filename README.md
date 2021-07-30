@@ -1,4 +1,4 @@
-# TOTP ![PHP 7.2+][php-image] [![Build Status][build-image]][build-url] [![PHPStan][phpstan-image]][phpstan-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Packagist][packagist-image]][packagist-url]
+# TOTP ![PHP 7.4+][php-image] [![Build Status][build-image]][build-url] [![PHPStan][phpstan-image]][phpstan-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Packagist][packagist-image]][packagist-url]
 
 A PHP library for generating one-time passwords according to [RFC-6238](http://tools.ietf.org/html/rfc6238) for time-based OTP generation.
 
@@ -25,7 +25,7 @@ if (EAMann\TOTP\is_valid_auth_code($token, $otp)) {
 ```
 
 
-[php-image]: https://img.shields.io/badge/php-7.2%2B-green.svg
+[php-image]: https://img.shields.io/badge/php-7.4%2B-green.svg
 [packagist-image]: https://img.shields.io/packagist/dt/ericmann/totp.svg
 [packagist-url]: https://packagist.org/packages/ericmann/totp
 [phpstan-image]: https://github.com/ericmann/totp/actions/workflows/analysis.yml/badge.svg
