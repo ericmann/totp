@@ -35,4 +35,6 @@ jobs:
       run: vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
 
     - name: Report code Coverage
-      run: vendor/bin/php-coveralls
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      run: vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
