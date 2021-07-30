@@ -5,11 +5,14 @@ matrix:
     - php: 7.2
     - php: 7.3
     - php: nightly
-    - php: 7.3
+    - php: 7.4
+    - php: 8.0
+    - php: nightly
+    - php: 7.4
       env: TRAVISCI=phpcs
   allow_failures:
     - php: nightly
-    - php: 7.3
+    - php: 7.4
       env: TRAVISCI=phpcs
 
 before_script:
