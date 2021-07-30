@@ -12,7 +12,7 @@ jobs:
         include:
         - operating-system: 'ubuntu-latest'
           php-versions: '7.4'
-          phpunit-versions: '7.5.20'
+          phpunit-versions: '8.5.18'
 
     steps:
     - uses: actions/checkout@v2
