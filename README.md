@@ -1,4 +1,4 @@
-# TOTP ![PHP 7.4+][php-image] [![Build Status][build-image]][build-url] [![PHPStan][phpstan-image]][phpstan-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Packagist][packagist-image]][packagist-url]
+# TOTP ![PHP 8.2+][php-image] [![Build Status][build-image]][build-url] [![PHPStan][phpstan-image]][phpstan-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Packagist][packagist-image]][packagist-url]
 
 A PHP library for generating one-time passwords according to [RFC-6238](http://tools.ietf.org/html/rfc6238) for time-based OTP generation.
 
